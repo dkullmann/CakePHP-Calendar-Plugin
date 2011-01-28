@@ -3,13 +3,12 @@ class EventsController extends CalendarAppController {
 
 	var $name = 'Events';
 	
-	public $helpers = array('Calendar.TimeZone');
+	public $helpers = array('Calendar.TimeZone', 'Calendar.DatePicker');
 
 	function index() {
 		$this->data['Event']['start_date'] = $this->Event->deconstruct('start_date', $this->data['Event']['start_date']);
-		$this->data['Event']['end_date'] = $this->Event->deconstruct('end_date', $this->data['Event']['end_date']);
+		$this->data['Event']['end_date']   = $this->Event->deconstruct('end_date', $this->data['Event']['end_date']);
 
-		debug($this->data);
 		$this->paginate = array(
 			'recurring',
 			'start_date' => $this->data['Event']['start_date'],

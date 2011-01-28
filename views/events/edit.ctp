@@ -8,7 +8,7 @@
 		echo $this->Form->input('description');
 		echo $this->Form->input('start_date');
 		echo $this->Form->input('end_date');
-		echo $this->Form->input('time_zone');
+		echo $this->TimeZone->select('time_zone');
 		echo $this->Form->input('summary');
 	?>
 	</fieldset>

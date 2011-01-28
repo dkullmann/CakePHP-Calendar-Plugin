@@ -1,11 +1,23 @@
+<?php
+
+	$this->Html->script(array(
+			'/calendar/js/datepicker/date.js',
+			'/calendar/js/datepicker/jquery.datePicker.js',
+			'/calendar/js/datepicker/cake.datePicker.js',
+		),
+		array('inline' => false)
+	);
+	
+	$this->Html->css('/calendar/css/datepicker/datePicker.css', 'stylesheet', array('inline' => false));
+?>
 <div class="events form">
 <?php echo $this->Form->create('Event');?>
 	<fieldset>
  		<legend><?php __('Find Events'); ?></legend>
 	<?php
 
-		echo $this->Form->input('start_date');
-		echo $this->Form->input('end_date');
+		echo $this->DatePicker->picker('start_date');
+		echo $this->DatePicker->picker('end_date');
 		echo $this->TimeZone->select('time_zone');
 	?>
 	</fieldset>
