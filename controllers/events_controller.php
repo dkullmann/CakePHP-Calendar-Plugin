@@ -4,6 +4,8 @@ class EventsController extends CalendarAppController {
 	var $name = 'Events';
 	
 	public $helpers = array('Calendar.TimeZone', 'Calendar.DatePicker');
+	
+	public $components = array('RequestHandler');
 
 	function index() {
 		$this->data['Event']['start_date'] = $this->Event->deconstruct('start_date', $this->data['Event']['start_date']);
