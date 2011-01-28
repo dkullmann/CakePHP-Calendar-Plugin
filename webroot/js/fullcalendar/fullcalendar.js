@@ -42,6 +42,8 @@ var defaults = {
 	lazyFetching: true,
 	startParam: 'start',
 	endParam: 'end',
+	offsetParam: 'browserOffset',
+	//browserOffset: null
 	
 	// time formats
 	titleFormat: {
@@ -911,6 +913,7 @@ function EventManager(options, sources) {
 	function _fetchEventSource(source, callback) {
 		if (typeof source == 'string') {
 			var params = {};
+			params[options.offsetParam] = options.browserOffset;
 			params[options.startParam] = Math.round(rangeStart.getTime() / 1000);
 			params[options.endParam] = Math.round(rangeEnd.getTime() / 1000);
 			if (options.cacheParam) {

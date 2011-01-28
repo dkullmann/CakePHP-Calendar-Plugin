@@ -3,7 +3,7 @@
 <?php
 	$this->Html->script(array(
 		'/calendar/js/fullcalendar/fullcalendar.js',
-		'/calendar/js/fullcalendar/fullcalendar.min.js',
+		#'/calendar/js/fullcalendar/fullcalendar.min.js',
 		'/calendar/js/fullcalendar/gcal.js'),
 		array('inline' => false)
 	);
@@ -13,12 +13,17 @@
 	$events_url = $this->Html->url(array('plugin' => 'calendar', 'controller' => 'events', 'action' => 'index', 'ext' => 'json', $this->params['pass'][0]));
 	
 	$fullCalendar = "
+	
+var d = new Date();
 
 $('#calendar').fullCalendar({
 	editable: true,
 	events: '$events_url',
 	defaultView: 'agendaWeek',
 	allDayDefault: false,
+	ignoreTimezone: false,
+	selectable: true,
+	browserOffset: -d.getTimezoneOffset()/60,
 	});
 
 	";

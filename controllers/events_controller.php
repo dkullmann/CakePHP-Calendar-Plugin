@@ -3,7 +3,7 @@ class EventsController extends CalendarAppController {
 
 	var $name = 'Events';
 	
-	public $helpers = array('Calendar.TimeZone', 'Calendar.DatePicker');
+	public $helpers = array('Time', 'Calendar.TimeZone', 'Calendar.DatePicker');
 	
 	public $components = array('RequestHandler');
 
@@ -23,6 +23,7 @@ class EventsController extends CalendarAppController {
 		if($this->RequestHandler->isAjax()) {
 			$this->data['Event']['start_date'] = $this->Event->unixToDate($this->params['url']['start']);	
 			$this->data['Event']['end_date']   = $this->Event->unixToDate($this->params['url']['end']);
+			$this->set('browser_offset', $this->params['url']['browserOffset']);
 		}
 		
 		if(isset($this->data)) {
