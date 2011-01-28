@@ -1,24 +1,6 @@
 <div class="calendars view">
-<h2><?php  __('Calendar');?></h2>
+<h2><?php  __('Calendar'); echo ': ' . $calendar['Calendar']['title'];?></h2>
 <?php echo $this->element('calendar/calendar'); ?>
-<!--	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $calendar['Calendar']['id']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Title'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $calendar['Calendar']['title']; ?>
-			&nbsp;
-		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Notes'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $calendar['Calendar']['notes']; ?>
-			&nbsp;
-		</dd>
-	</dl>
--->
 </div>
 <div class="actions">
 	<h3><?php __('Actions'); ?></h3>
