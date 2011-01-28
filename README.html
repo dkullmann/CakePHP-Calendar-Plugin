@@ -1,0 +1,37 @@
+CakePHP Calendar Plugin
+
+Contains the basic logic of a calendar with recurring events. Any modifications made to this plugin should be based on the schema for iCal and the RFC:
+
+REFERENCES
+
+iCal Schema: http://developer.apple.com/library/mac/#documentation/AppleApplications/Reference/SyncServicesSchemaRef/Articles/Calendars.html
+Calendar Store Overview: http://developer.apple.com/library/mac/#documentation/AppleApplications/Conceptual/CalendarStoreProgGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004334
+RFC 5545: http://datatracker.ietf.org/doc/rfc5545/
+
+There is an old RFC 2445, as well.
+
+RECURRENCE
+
+Weekly recurrence on a particular day or a set of days is supported.
+
+EVENTS
+
+Repeating events and one time events are supported. You cannot have "detached" events at this time. A detached event is when one event in a series is altered and the rest of the events in that series are unaffected.
+
+TO DO:
+
+RECURRENCE
+
+Include support for daily, monthly, and yearly recurrence.
+
+EVENTS
+
+Include support for detached events.
+
+ATTENDEES
+
+Include support for attendees.
+
+ORGANIZER
+
+Include support for organizers.

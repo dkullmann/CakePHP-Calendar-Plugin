@@ -9,12 +9,14 @@
 ?>
 
 <?php
-	$app_base = '/sites/caldev';
+	
+	$events_url = $this->Html->url(array('plugin' => 'calendar', 'controller' => 'events', 'action' => 'index', 'ext' => 'json', $this->params['pass'][0]));
+	
 	$fullCalendar = "
 
 $('#calendar').fullCalendar({
 	editable: true,
-	events: '$app_base/calendar/events/index.json'
+	events: '$events_url',
 	});
 
 	";

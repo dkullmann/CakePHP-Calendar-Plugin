@@ -101,6 +101,18 @@ class Event extends CalendarAppModel {
 		
 		return $date->setTimezone($time_zone);
 	}
+
+/**
+ * Converts a unix timestamp into a SQL date..
+ *
+ * @param string Unix timestamp.
+ * @return string Time formatted as $this->date_format
+ * @access public
+ */		
+	public function unixToDate($unixtime = null) {
+		$date = new DateTime('@'.$unixtime);
+		return $date->format($this->date_format);
+	}
 	
 /**
  * Renders a recurring event for the given date. Does not check to make sure the
@@ -181,15 +193,18 @@ class Event extends CalendarAppModel {
 		
 			$query['page'] = 1;
 			$query['conditions'] = array(
-					"OR" => array (
-						"AND" => array (
-							"Event.end_date >" => $start_date,
-							"Event.start_date <" => $end_date,
+					"AND" => array(
+						"OR" => array (
+							"AND" => array (
+								"Event.end_date >" => $start_date,
+								"Event.start_date <" => $end_date,
+							),
+							"Event.recurring" => true,
 						),
-						"Event.recurring" => true,
+						"Event.calendar_id" => array($query['calendar_id']),
 					)
 				);
-			
+
 			return $query;
 
 		} elseif ($state == 'after') {

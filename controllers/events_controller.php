@@ -8,16 +8,32 @@ class EventsController extends CalendarAppController {
 	public $components = array('RequestHandler');
 
 	function index() {
-		$this->data['Event']['start_date'] = $this->Event->deconstruct('start_date', $this->data['Event']['start_date']);
-		$this->data['Event']['end_date']   = $this->Event->deconstruct('end_date', $this->data['Event']['end_date']);
-
-		$this->paginate = array(
-			'recurring',
-			'start_date' => $this->data['Event']['start_date'],
-			'end_date'   => $this->data['Event']['end_date'],
-			'time_zone'  => $this->data['Event']['time_zone']
-			);
-
+	
+		if(isset($this->data)) {			
+			$this->data['Event']['start_date'] = $this->Event->deconstruct('start_date', $this->data['Event']['start_date']);
+			$this->data['Event']['end_date']   = $this->Event->deconstruct('end_date', $this->data['Event']['end_date']);	
+		}
+		
+		if(!isset($this->data['Event']['time_zone'])) {
+			$time_zone = 'UTC';
+		} else {
+			$time_zone = $this->data['Event']['time_zone'];
+		}
+		
+		if($this->RequestHandler->isAjax()) {
+			$this->data['Event']['start_date'] = $this->Event->unixToDate($this->params['url']['start']);	
+			$this->data['Event']['end_date']   = $this->Event->unixToDate($this->params['url']['end']);
+		}
+		
+		if(isset($this->data)) {
+			$this->paginate = array(
+				'recurring',
+				'start_date' => $this->data['Event']['start_date'],
+				'end_date'   => $this->data['Event']['end_date'],
+				'time_zone'  => $time_zone,
+				'calendar_id'=> $this->params['pass'][0],
+				);
+		}
 		$this->set('events', $this->paginate());
 	}
 
