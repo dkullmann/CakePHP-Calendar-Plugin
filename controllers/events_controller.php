@@ -32,7 +32,7 @@ class EventsController extends CalendarAppController {
 				'start_date' => $this->data['Event']['start_date'],
 				'end_date'   => $this->data['Event']['end_date'],
 				'time_zone'  => $time_zone,
-				'calendar_id'=> $this->params['pass'][0],
+				'calendar_id'=> $this->params['pass'],
 				);
 		}
 		$this->set('events', $this->paginate());

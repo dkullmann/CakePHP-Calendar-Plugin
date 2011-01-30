@@ -200,9 +200,12 @@ class Event extends CalendarAppModel {
 							),
 							"Event.recurring" => true,
 						),
-						"Event.calendar_id" => array($query['calendar_id']),
 					)
 				);
+				
+			if (!empty($query['calendar_id'])) {
+				$query['conditions']['AND'][] = array( "Event.calendar_id" => $query['calendar_id'] );
+			}
 
 			return $query;
 
