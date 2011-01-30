@@ -45,8 +45,11 @@ class Event extends CalendarAppModel {
 	
 	public $date_format = 'Y-m-d H:i:s';
 	
+	public $utc_tz;
+	
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
+		$this->utc_tz = new DateTimeZone('UTC');
 		$this->_findMethods['recurring'] = true;
 	}
 
@@ -67,8 +70,7 @@ class Event extends CalendarAppModel {
 		}
 	
 		if(!is_a($date, 'DateTime')) {
-			$utc_tz = new DateTimeZone('UTC');
-			$date = new DateTime($date, $utc_tz);
+			$date = new DateTime($date, $this->utc_tz);
 			$date->setTimezone($time_zone);
 			return $date->format($return_format);
 		}
@@ -93,9 +95,8 @@ class Event extends CalendarAppModel {
 		}
 	
 		if(!is_a($date, 'DateTime')) {
-			$utc_tz = new DateTimeZone('UTC');
 			$date = new DateTime($date, $time_zone);
-			$date->setTimezone($utc_tz);
+			$date->setTimezone($this->utc_tz);
 			return $date->format($return_format);
 		}
 		
@@ -128,10 +129,9 @@ class Event extends CalendarAppModel {
 		$rendered_event = $event;
 		
 		$user_tz = new DateTimeZone($event[$this->alias]['time_zone']);
-		$utc_tz = new DateTimeZone('UTC');
 		
-		$start_date = new DateTime($event[$this->alias]['start_date'], $utc_tz);
-		$end_date   = new DateTime($event[$this->alias]['end_date'], $utc_tz);
+		$start_date = new DateTime($event[$this->alias]['start_date'], $this->utc_tz);
+		$end_date   = new DateTime($event[$this->alias]['end_date'], $this->utc_tz);
 		
 		$interval = $start_date->diff($end_date);
 						
@@ -141,7 +141,7 @@ class Event extends CalendarAppModel {
 		
 		$date->setTimezone($user_tz);
 		$date->setTime($floating_start_hour, $date->format('i'), $date->format('s'));
-		$date->setTimezone($utc_tz);
+		$date->setTimezone($this->utc_tz);
 		$event[$this->alias]['start_date'] = $date->format($this->date_format);
 		
 		$date->add($interval);
@@ -184,7 +184,6 @@ class Event extends CalendarAppModel {
  */
 	protected function _findRecurring($state, $query, $results = array()) {
 
-		$utc_tz = new DateTimeZone('UTC');
 		$events = array();
 	
 		if ($state == 'before' ) {
@@ -208,14 +207,14 @@ class Event extends CalendarAppModel {
 			return $query;
 
 		} elseif ($state == 'after') {
-					
+							
 			foreach ($results as $event) {
 				if (count($event['RecurrenceRule']) >= 1) {
 				
 					$one_day = new DateInterval('P1D');
-					$end_day = new DateTime($query['end_date'], $utc_tz);
+					$end_day = new DateTime($query['end_date'], $this->utc_tz);
 					
-					for ($date = new DateTime($query['start_date'], $utc_tz); $date <= $end_day; $date->add($one_day)) {
+					for ($date = new DateTime($query['start_date'], $this->utc_tz); $date <= $end_day; $date->add($one_day)) {
 
 						foreach ($event['RecurrenceRule'] as $rule) {
 							if ($this->RecurrenceRule->ruleIsTrue($rule, $date)) {
