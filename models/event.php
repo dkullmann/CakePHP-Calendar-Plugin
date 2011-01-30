@@ -1,7 +1,25 @@
 <?php
 class Event extends CalendarAppModel {
+
+/**
+ * Name
+ *
+ * @var string
+ */
 	var $name = 'Event';
+
+/**
+ * Additional Find types to be used with find($type);
+ *
+ * @var array
+ */
+	public $_findMethods = array('recurring' => true);
 	
+/**
+ * Validation rules
+ *
+ * @var array
+ */
 	var $validate = array(
 		'calendar_id' => array(
 			'numeric' => array(
@@ -15,8 +33,11 @@ class Event extends CalendarAppModel {
 		),
 	);
 	
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
+/**
+ * belongsTo associations
+ *
+ * @var array
+ */
 	var $belongsTo = array(
 		'Calendar' => array(
 			'className' => 'Calendar',
@@ -26,7 +47,12 @@ class Event extends CalendarAppModel {
 			'order' => ''
 		)
 	);
-
+	
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
 	var $hasMany = array(
 		'RecurrenceRule' => array(
 			'className' => 'Calendar.RecurrenceRule',
@@ -43,8 +69,19 @@ class Event extends CalendarAppModel {
 		)
 	);
 	
+/**
+ * Common format for dates
+ *
+ * @var string
+ */
 	public $date_format = 'Y-m-d H:i:s';
 	
+/**
+ * DateTimeZone object in UTC 
+ *
+ * @var array
+ * @see Event::__construct()
+ */
 	public $utc_tz;
 	
 	public function __construct($id = false, $table = null, $ds = null) {

@@ -1,6 +1,11 @@
 <?php
 class CalendarsController extends CalendarAppController {
 
+/**
+ * Name
+ *
+ * @var string
+ */
 	var $name = 'Calendars';
 
 	function index() {

@@ -1,6 +1,11 @@
 <?php
 class RecurrenceRulesController extends CalendarAppController {
 
+/**
+ * Name
+ *
+ * @var string
+ */
 	var $name = 'RecurrenceRules';
 
 	function index() {

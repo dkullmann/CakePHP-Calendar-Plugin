@@ -1,12 +1,27 @@
 <?php
 class EventsController extends CalendarAppController {
 
+/**
+ * Name
+ *
+ * @var string
+ */
 	var $name = 'Events';
-	
-	public $helpers = array('Time', 'Calendar.TimeZone', 'Calendar.DatePicker');
-	
-	public $components = array('RequestHandler');
 
+/**
+ * Helpers
+ *
+ * @var array
+ */
+	public $helpers = array('Time', 'Calendar.TimeZone', 'Calendar.DatePicker');
+
+/**
+ * Components
+ *
+ * @var array
+ */
+	public $components = array('RequestHandler');
+	
 	function index() {
 	
 		if(isset($this->data)) {			

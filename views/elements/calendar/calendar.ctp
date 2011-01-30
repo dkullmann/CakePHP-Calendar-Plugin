@@ -3,7 +3,6 @@
 <?php
 	$this->Html->script(array(
 		'/calendar/js/fullcalendar/fullcalendar.js',
-		#'/calendar/js/fullcalendar/fullcalendar.min.js',
 		'/calendar/js/fullcalendar/gcal.js'),
 		array('inline' => false)
 	);

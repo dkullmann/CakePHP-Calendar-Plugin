@@ -1,9 +1,25 @@
 <?php
 class Calendar extends CalendarAppModel {
-	var $name = 'Calendar';
-	var $displayField = 'title';
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
+/**
+ * Name
+ *
+ * @var string
+ */
+ 	var $name = 'Calendar';
+
+/**
+ * displayField
+ *
+ * @var string
+ */
+	var $displayField = 'title';
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
 	var $hasMany = array(
 		'Event' => array(
 			'className' => 'Event',
