@@ -127,11 +127,11 @@ class Event extends CalendarAppModel {
 	
 		$rendered_event = $event;
 		
-		$user_tz = new DateTimeZone($event['Event']['time_zone']);
+		$user_tz = new DateTimeZone($event[$this->alias]['time_zone']);
 		$utc_tz = new DateTimeZone('UTC');
 		
-		$start_date = new DateTime($event['Event']['start_date'], $utc_tz);
-		$end_date   = new DateTime($event['Event']['end_date'], $utc_tz);
+		$start_date = new DateTime($event[$this->alias]['start_date'], $utc_tz);
+		$end_date   = new DateTime($event[$this->alias]['end_date'], $utc_tz);
 		
 		$interval = $start_date->diff($end_date);
 						
@@ -142,10 +142,10 @@ class Event extends CalendarAppModel {
 		$date->setTimezone($user_tz);
 		$date->setTime($floating_start_hour, $date->format('i'), $date->format('s'));
 		$date->setTimezone($utc_tz);
-		$event['Event']['start_date'] = $date->format($this->date_format);
+		$event[$this->alias]['start_date'] = $date->format($this->date_format);
 		
 		$date->add($interval);
-		$event['Event']['end_date']   = $date->format($this->date_format);
+		$event[$this->alias]['end_date']   = $date->format($this->date_format);
 		
 		return $event;
 		
@@ -161,12 +161,12 @@ class Event extends CalendarAppModel {
  */
 	public function beforeSave($options = array()) {
 
-		extract($this->data['Event']);
+		extract($this->data[$this->alias]);
 				
 		$user_tz = new DateTimeZone($time_zone);
 
-		$this->data['Event']['start_date'] = $this->timezoneToUtc($start_date, $user_tz);
-		$this->data['Event']['end_date']   = $this->timezoneToUtc($end_date, $user_tz);
+		$this->data[$this->alias]['start_date'] = $this->timezoneToUtc($start_date, $user_tz);
+		$this->data[$this->alias]['end_date']   = $this->timezoneToUtc($end_date, $user_tz);
 				
 		return true;
 
