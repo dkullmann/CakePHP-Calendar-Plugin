@@ -14,7 +14,17 @@ class Event extends CalendarAppModel {
  * @var array
  */
 	public $_findMethods = array('recurring' => true);
-	
+
+/**
+ * recurrenceStart and recurrenceEnd - the start and end
+ * dates to use in calculating recurring events
+ *
+ * @var string
+ * @see Event::beforeFind() and Event::afterFind()
+ */
+	public $_recurrenceStart = null;
+	public $_recurrenceEnd = null;
+
 /**
  * Validation rules
  *
@@ -221,7 +231,7 @@ class Event extends CalendarAppModel {
  */
 	protected function _findRecurring($state, $query, $results = array()) {
 
-		$events = array();
+		/* $events = array(); */
 	
 		if ($state == 'before' ) {
 			$start_date = $query['start_date'];
@@ -247,7 +257,9 @@ class Event extends CalendarAppModel {
 			return $query;
 
 		} elseif ($state == 'after') {
-							
+
+			/* Moved to afterFind()	so it would affect all queries */
+			/*		
 			foreach ($results as $event) {
 				if (count($event['RecurrenceRule']) >= 1) {
 				
@@ -267,11 +279,68 @@ class Event extends CalendarAppModel {
 					$events[] = $event;
 				}
 			}
+			*/
 		}
 
-		return $events;
+		/* return $events; */
+		return $results;
 	}
 
+/**
+ * beforeFind() saves the start and end time given to the find operation
+ * so that recurring events can be calculated in afterFind
+ *
+ * @param mixed $query Query data based in from find method
+ * @return mixed $query Query data
+ * @access public
+ */
+ 
+ 	/* TODO: We should make a $query parameter 'recurring' to use here */
+	public function beforeFind($query) {
+
+		if(!empty($query['start_date']) && !empty($query['end_date'])) {
+			$this->_recurrenceStart = $query['start_date'];
+			$this->_recurrenceEnd = $query['end_date'];
+		}
+		
+		return parent::beforeFind($query);
+	}
+
+/**
+ * afterFind() creates recurring events from results set
+ *
+ * @param array $results The results from the find operation
+ * @param bool $primary true if this is the primary model for the find operation
+ * @return array Modified results set
+ * @access public
+ */
+ 
+ 	/* TODO: There may be more logic required if we are not the primary model. */
+	public function afterFind($results, $primary) {
+		debug($results);
+			foreach ($results as $event) {
+				if (isset($event['RecurrenceRule']) && count($event['RecurrenceRule']) >= 1) {
+				
+					$one_day = new DateInterval('P1D');
+					$end_day = new DateTime($this->_recurrenceEnd, $this->utc_tz);
+					
+					for ($date = new DateTime($this->_recurrenceStart, $this->utc_tz); $date <= $end_day; $date->add($one_day)) {
+
+						foreach ($event['RecurrenceRule'] as $rule) {
+							if ($this->RecurrenceRule->ruleIsTrue($rule, $date)) {
+								$events[] = $this->renderEventForDate($event, $date);
+							}
+						}
+					}
+					
+				} else {
+					$events[] = $event;
+				}
+			}
+			
+		debug($events);			
+		return parent::afterFind($events, $primary);
+	}
 
 }
 ?>
