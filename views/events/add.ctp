@@ -11,6 +11,13 @@
 		echo $this->Form->input('summary');
 	?>
 	</fieldset>
+	<fieldset>
+ 		<legend><?php __('Add Recurrence Rule'); ?></legend>
+	<?php
+		echo $this->Calendar->dayCheckboxes('RecurrenceRule.0.bydaydays');
+		echo $this->Form->input('RecurrenceRule.0.frequency');
+	?>
+	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>
 </div>
 <div class="actions">

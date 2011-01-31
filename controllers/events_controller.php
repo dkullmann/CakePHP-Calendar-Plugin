@@ -13,7 +13,7 @@ class EventsController extends CalendarAppController {
  *
  * @var array
  */
-	public $helpers = array('Time', 'Calendar.TimeZone', 'Calendar.DatePicker');
+	public $helpers = array('Time', 'Calendar.TimeZone', 'Calendar.DatePicker', 'Calendar.Calendar');
 
 /**
  * Components
@@ -21,7 +21,7 @@ class EventsController extends CalendarAppController {
  * @var array
  */
 	public $components = array('RequestHandler');
-	
+
 	function index() {
 	
 		if(isset($this->data)) {			
@@ -64,7 +64,7 @@ class EventsController extends CalendarAppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Event->create();
-			if ($this->Event->save($this->data)) {
+			if ($this->Event->saveAll($this->data)) {
 				$this->Session->setFlash(__('The event has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

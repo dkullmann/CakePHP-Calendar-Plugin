@@ -17,6 +17,13 @@ class RecurrenceRule extends CalendarAppModel {
 		'event_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
+				'on' => 'update'
+			),
+		),
+		'frequency' => array(
+			'allowedChoice' => array(
+				'rule' => array('inList', array('daily','weekly','monthly','yearly')),
+				'message' => 'Recurrence must be daily, weekly, monthly, or yearly',
 			),
 		),
 	);
@@ -64,6 +71,15 @@ class RecurrenceRule extends CalendarAppModel {
 		}
 		
 		return false;
+	}
+	
+	public function beforeSave() {
+
+		if(!empty($this->data[$this->alias]['bydaydays'])) {
+			$this->data[$this->alias]['bydaydays'] = implode(',',array_values($this->data[$this->alias]['bydaydays']));	
+		}
+
+		return true;
 	}
 }
 ?>
