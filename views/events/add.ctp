@@ -15,7 +15,7 @@
  		<legend><?php __('Add Recurrence Rule'); ?></legend>
 	<?php
 		echo $this->Calendar->dayCheckboxes('RecurrenceRule.0.bydaydays');
-		echo $this->Form->input('RecurrenceRule.0.frequency');
+		echo $this->Calendar->frequencySelect('RecurrenceRule.0.frequency');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>
