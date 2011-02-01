@@ -23,6 +23,8 @@ class EventsController extends CalendarAppController {
 	public $components = array('RequestHandler');
 
 	function index() {
+
+		$conditions = array();
 	
 		if(isset($this->data)) {			
 			$this->data['Event']['start_date'] = $this->Event->deconstruct('start_date', $this->data['Event']['start_date']);
@@ -42,13 +44,16 @@ class EventsController extends CalendarAppController {
 		}
 		
 		if(isset($this->data)) {
-			$this->paginate = array(
-				'recurring',
+			$conditions = array(
 				'start_date' => $this->data['Event']['start_date'],
 				'end_date'   => $this->data['Event']['end_date'],
-				'time_zone'  => $time_zone,
-				'calendar_id'=> $this->params['pass'],
-				);
+			);
+			
+			if(!empty($this->params['pass'])) {
+				$conditions['calendar_id'] = $this->params['pass'];
+			}
+						
+			$this->paginate = array( 'conditions' => $conditions );
 		}
 		$this->set('events', $this->paginate());
 	}

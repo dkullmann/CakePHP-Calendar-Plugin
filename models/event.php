@@ -234,8 +234,9 @@ class Event extends CalendarAppModel {
 		/* $events = array(); */
 	
 		if ($state == 'before' ) {
-			$start_date = $query['start_date'];
-			$end_date   = $query['end_date'];
+			return $query;
+			$start_date = $query['conditions']['start_date'];
+			$end_date   = $query['conditions']['end_date'];
 		
 			$query['page'] = 1;
 			$query['conditions'] = array(
@@ -297,13 +298,24 @@ class Event extends CalendarAppModel {
  
  	/* TODO: We should make a $query parameter 'recurring' to use here */
 	public function beforeFind($query) {
-
-		if(!empty($query['start_date']) && !empty($query['end_date'])) {
-			$this->_recurrenceStart = $query['start_date'];
-			$this->_recurrenceEnd = $query['end_date'];
+		
+		if(!empty($query['conditions']['start_date']) && !empty($query['conditions']['end_date'])) {
+			$this->_recurrenceStart = $query['conditions']['start_date'];
+			$this->_recurrenceEnd = $query['conditions']['end_date'];
+			
+			$query['conditions']['OR'] = array(
+					"AND" => array (
+						"Event.end_date >" => $query['conditions']['start_date'],
+						"Event.start_date <" => $query['conditions']['end_date'],
+					),
+					"Event.recurring" => true,
+				);
+				
+			unset($query['conditions']['start_date']);
+			unset($query['conditions']['end_date']);
 		}
 		
-		return parent::beforeFind($query);
+		return $query;
 	}
 
 /**
@@ -317,7 +329,7 @@ class Event extends CalendarAppModel {
  
  	/* TODO: There may be more logic required if we are not the primary model. */
 	public function afterFind($results, $primary) {
-		debug($results);
+
 			foreach ($results as $event) {
 				if (isset($event['RecurrenceRule']) && count($event['RecurrenceRule']) >= 1) {
 				
@@ -338,7 +350,6 @@ class Event extends CalendarAppModel {
 				}
 			}
 			
-		debug($events);			
 		return parent::afterFind($events, $primary);
 	}
 
